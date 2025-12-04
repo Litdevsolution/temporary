@@ -1,6 +1,6 @@
 {
-    "name": "staypermitappv1",
-    "short_name": "staypermitappv1",
+    "name": "temporary",
+    "short_name": "temporary",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

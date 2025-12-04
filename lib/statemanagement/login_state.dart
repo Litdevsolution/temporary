@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../repository/repository.dart';
 import '../routes/route_app.dart';
 import '../pages/home/home_page.dart';
 import '../statemanagement/app_verification_state.dart';
 import '../widgets/dialog_app_widget.dart';
+import 'package:http/http.dart' as http;
 
 class LoginState extends GetxController {
   AppVerificationState appVerificationState = Get.put(AppVerificationState());
   Repository repository = Repository();
+
   Future<bool> login({
     required BuildContext context,
     required String username,
@@ -31,9 +33,7 @@ class LoginState extends GetxController {
       final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        // KEY FIX: Changed from 'token' to 'accessToken'
         if (responseData['accessToken'] == null) {
-          print('🔴 No accessToken in response: $responseData');
           DialogAppWidget().errorToast(
             context,
             "Login successful but no accessToken received",
@@ -41,20 +41,29 @@ class LoginState extends GetxController {
           return false;
         }
 
-        print('🟢 AccessToken: ${responseData['accessToken']}');
+        final accessToken = responseData['accessToken'];
+        final refreshToken = responseData['refreshToken'];
         final user = responseData['user'];
-        final role =
-            user['role'] ?? 'USER'; // safely fallback if role not found
+        final role = user['role'] ?? 'USER';
 
+        // ✅ Save tokens & user info locally
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('accessToken', accessToken);
+        await prefs.setString('refreshToken', refreshToken);
+        await prefs.setString('user', jsonEncode(user));
+
+        // Set in AppVerificationState
         await appVerificationState.setTokens(
-          accessToken: responseData['accessToken'],
-          refreshToken: responseData['refreshToken'],
-          user: responseData['user'],
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          user: user,
         );
+
         DialogAppWidget().showsuccessToast(
           context,
           responseData['message'] ?? 'Login successful',
         );
+
         Get.offAllNamed(RouteApp.home, arguments: {'role': role});
         return true;
       } else {
@@ -68,4 +77,42 @@ class LoginState extends GetxController {
       return false;
     }
   }
+
+  /// ✅ Check if user is already logged in
+  Future<bool> checkRememberLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('accessToken');
+    final userJson = prefs.getString('user');
+
+    if (accessToken != null && userJson != null) {
+      final user = jsonDecode(userJson);
+      final role = user['role'] ?? 'USER';
+
+      // Set in AppVerificationState
+      await appVerificationState.setTokens(
+  accessToken: accessToken,
+  refreshToken: prefs.getString('refreshToken') ?? '',
+  user: user,
+);
+
+
+      // Navigate directly to Home
+      Get.offAllNamed(RouteApp.home, arguments: {'role': role});
+      return true;
+    }
+    return false;
+  }
+
+  /// ✅ Logout
+  Future<void> logout() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear(); // remove all stored data
+
+  // Clear states
+  appVerificationState.clearTokens();
+
+  // Move to Login Page
+  Get.offAllNamed(RouteApp.login);
+}
+
 }

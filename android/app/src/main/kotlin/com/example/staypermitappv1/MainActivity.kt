@@ -1,4 +1,4 @@
-package com.example.staypermitappv1
+package com.example.temporary
 
 import io.flutter.embedding.android.FlutterActivity
 

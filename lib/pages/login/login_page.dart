@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../routes/route_app.dart';
-import 'package:staypermitappv1/pages/home/home_page.dart';
-import 'package:staypermitappv1/statemanagement/login_state.dart';
-import 'package:staypermitappv1/statemanagement/app_verification_state.dart';
-import 'package:staypermitappv1/widgets/dialog_app_widget.dart';
+import 'package:temporary/pages/home/home_page.dart';
+import 'package:temporary/statemanagement/login_state.dart';
+import 'package:temporary/statemanagement/app_verification_state.dart';
+import 'package:temporary/widgets/dialog_app_widget.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
@@ -39,11 +39,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFCFEAFD),
       body: SafeArea(
         child: Stack(
-          fit: StackFit.expand,
           children: [
-            Image.asset("assets/ministryOfJustice.jpg", fit: BoxFit.cover),
             Center(
               child: SingleChildScrollView(
                 // ← Add this
@@ -68,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 10),
                       const Text(
-                        'ເຂົ້າສູ່ລະບົບກົມຕຳຫຼວດ',
+                        'ເຂົ້າສູ່ລະບົບກົມ 207 ',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -127,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                           // },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: const Color(0xFFF5D9AE),
+                            backgroundColor: const Color(0xFF74D2FA),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

@@ -49,6 +49,12 @@ class AppVerificationState extends GetxController {
     
     update();
   }
+  void clearTokens() {
+  _accessToken = "";
+  _refreshToken = "";
+  update();
+}
+
 
   // Getters
   String get accessToken => _accessToken;

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:staypermitappv1/models/profile_aggregation_model.dart';
-import 'package:staypermitappv1/repository/repository.dart';
+import 'package:temporary/models/profile_aggregation_model.dart';
+import 'package:temporary/repository/repository.dart';
 
 class ProfileAggregationState extends GetxController {
   final Repository repository = Repository();
@@ -13,6 +13,8 @@ class ProfileAggregationState extends GetxController {
   var female = 0.obs;
   var male = 0.obs;
   var newProfilesCount = 0.obs;
+  var applicationCount = 0.obs;
+  var neverApplication = 0.obs;
 
   void testValues() {
     total.value = 100;
@@ -62,6 +64,8 @@ class ProfileAggregationState extends GetxController {
             female.value = profileData.female;
             male.value = profileData.male;
             newProfilesCount.value = profileData.newProfilesCount;
+            applicationCount.value = profileData.applicationCount;
+            neverApplication.value = profileData.neverApplication;
           } else {
             debugPrint('⚠️ Unexpected data format: $responseData');
           }

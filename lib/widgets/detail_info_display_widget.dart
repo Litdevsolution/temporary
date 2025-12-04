@@ -101,8 +101,8 @@ class DetailInfoDisplay extends StatelessWidget {
       'ລາຍລະຂໍ້ມູນອຽດບັດ': [
         "type",
         "number.price.duration",
-        "profile.identityIssueDate",
-        "profile.identityExpiryDate",
+        "profile.application.issueDate",
+        "application.expiryDate",
         "number.price.type",
         "number.price.price",
       ],
@@ -246,14 +246,14 @@ class DetailInfoDisplay extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
+               ),
                 const SizedBox(height: 6),
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(bottom: 16),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 254, 245),
+                    color: const Color(0xFFDEE9F1),
                     border: Border.all(
                       color: const Color.fromARGB(255, 213, 213, 213),
                     ),

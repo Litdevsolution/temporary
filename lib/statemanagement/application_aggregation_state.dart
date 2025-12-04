@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:staypermitappv1/models/application_aggregation_model.dart';
-import 'package:staypermitappv1/repository/repository.dart';
+import 'package:temporary/models/application_aggregation_model.dart';
+import 'package:temporary/repository/repository.dart';
 
 class ApplicationAggregationState extends GetxController {
   final Repository repository = Repository();

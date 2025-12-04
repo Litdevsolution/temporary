@@ -31,7 +31,12 @@ class ScanCard extends StatelessWidget {
     }
     return value;
   }
-
+String fixImageUrl(String url) {
+  if (url.startsWith('http://')) {
+    return url.replaceFirst('http://', 'https://');
+  }
+  return url;
+}
   // New helper function to format dates
   String _formatDate(String? dateString) {
     if (dateString == null ||
@@ -97,7 +102,7 @@ class ScanCard extends StatelessWidget {
                           top: Radius.circular(16),
                         ),
                         child: Image.network(
-                          imageUrl,
+                          fixImageUrl(imageUrl),
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) =>
                               Image.asset(defaultPath, fit: BoxFit.cover),
@@ -144,6 +149,8 @@ class ScanCard extends StatelessWidget {
   // ----------------- UI -----------------
   @override
   Widget build(BuildContext context) {
+    print("show image");
+    print("imageUrl: $imageUrl");
     final leftColumn = [
       {'label': 'ຊື່/Name', 'key': 'profile.firstName'},
       {'label': 'ນາມສະກຸນ/Surname', 'key': 'profile.lastName'},
@@ -163,6 +170,12 @@ class ScanCard extends StatelessWidget {
       {'label': 'ສັນຊາດ/Nationality', 'key': 'profile.nationality.name'},
       {'label': 'ເລກທີ່/No', 'key': 'profile.identityNumber'},
     ];
+    final identityTypeMap = {
+    'nationalId': 'ບັດປະຈຳຕົວ',
+    'passport': 'ພາສປ໋ອດ',
+    'travelDocument': 'ເອກະສານເດີນທາງ',
+  };
+
 
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
@@ -176,8 +189,8 @@ class ScanCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromARGB(255, 247, 244, 228),
-                Color.fromARGB(255, 242, 225, 193),
+                Color(0xFFCFEAFD),
+                Color(0xFFCFEAFD),
               ],
             ),
             border: Border.all(color: const Color.fromARGB(255, 212, 210, 196)),
@@ -213,16 +226,20 @@ class ScanCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                         child: imageUrl.isNotEmpty
                             ? Image.network(
-                                imageUrl,
+                                fixImageUrl(imageUrl),
                                 width: 50,
                                 height: 50,
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Image.asset(
-                                  defaultImagePath,
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
+                                errorBuilder: (context, error, stackTrace) {
+              print("Failed to load image: $imageUrl");
+              print(error);
+              return Image.asset(
+                defaultImagePath,
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+              );
+            },
                               )
                             : Image.asset(
                                 defaultImagePath,
@@ -332,14 +349,21 @@ class ScanCard extends StatelessWidget {
                               ),
 
                               // 4. Loop ส่วนที่เหลือจาก leftColumn
-                              for (final f
-                                  in leftColumn
-                                      .skipWhile(
-                                        (e) =>
-                                            e['key'] != 'profile.dateOfBirth',
-                                      )
-                                      .skip(1))
-                                _buildField(f['label']!, _safe(f['key']!)),
+                               for (final f in leftColumn
+                        .skipWhile(
+                            (e) => e['key'] != 'profile.dateOfBirth')
+                        .skip(1))
+                      Builder(builder: (_) {
+                        final key = f['key']!;
+                        final label = f['label']!;
+                        final value = _safe(key);
+
+                        final displayValue = key == 'profile.identityType'
+                            ? (identityTypeMap[value] ?? value)
+                            : value;
+
+                        return _buildField(label, displayValue);
+                      }),
 
                               // 5. ต่อด้วย Row ของ Position, ออกให้, หมดอายุ...
                               Row(
@@ -391,7 +415,7 @@ class ScanCard extends StatelessWidget {
                               Row(
                                 children: [
                                   const Text(
-                                    'ໝົດອະຍຸ:',
+                                    'ໝົດອາຍຸ:',
                                     style: TextStyle(
                                       fontSize: 7,
                                       fontWeight: FontWeight.w500,
@@ -433,6 +457,7 @@ class ScanCard extends StatelessWidget {
                               ),
                               for (final f in rightColumn)
                                 _buildField(f['label']!, _safe(f['key']!)),
+                                SizedBox(height: 5),
                               Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -440,28 +465,28 @@ class ScanCard extends StatelessWidget {
                                     opacity: .8,
                                     child: Image.asset(
                                       'assets/immigration.png',
-                                      width: 50,
+                                      width: 80,
                                       fit: BoxFit.contain,
                                     ),
                                   ),
-                                  const Column(
-                                    children: [
-                                      Text(
-                                        "ກົມຕຳຫຼວດຄຸ້ມຄອງຄົນຕ່າງປະເທດ",
-                                        style: TextStyle(
-                                          fontSize: 7,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Department of Foreigner Control",
-                                        style: TextStyle(
-                                          fontSize: 7,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  // const Column(
+                                  //   children: [
+                                  //     Text(
+                                  //       "ກົມຕຳຫຼວດຄຸ້ມຄອງຄົນຕ່າງປະເທດ",
+                                  //       style: TextStyle(
+                                  //         fontSize: 7,
+                                  //         fontWeight: FontWeight.bold,
+                                  //       ),
+                                  //     ),
+                                  //     Text(
+                                  //       "Department of Foreigner Control",
+                                  //       style: TextStyle(
+                                  //         fontSize: 7,
+                                  //         fontWeight: FontWeight.bold,
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                 ],
                               ),
                             ],
