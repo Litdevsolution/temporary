@@ -6,9 +6,9 @@ plugins {
 }
 
 android {
-    namespace = "com.example.temporary"
+    namespace = "com.litsolution.temporary"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "28.2.13676358" // must match folder name in ~/Library/Android/sdk/ndk/
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.temporary"
+        applicationId = "com.litsolution.temporary"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

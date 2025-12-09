@@ -1,4 +1,4 @@
-// D:\Nengxiong\Code\staypermitmobileapp\lib\widgets\DetailInfoDisplay.dart
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

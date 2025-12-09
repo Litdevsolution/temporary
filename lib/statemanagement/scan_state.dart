@@ -18,8 +18,6 @@ class ScanState {
         '${repository.uri}/${repository.application}?barcode=$barcode&status=$status';
     print('⌛ Fetching API: $apiUrl');
     print('🔑 Token: ${authorizationToken.substring(0, 20)}...');  // Only show first 20 chars of token
-
-
     try {
       // Validate token
       if (authorizationToken.isEmpty || !authorizationToken.startsWith('Bearer ')) {

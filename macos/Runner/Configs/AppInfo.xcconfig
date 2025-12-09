@@ -8,7 +8,7 @@
 PRODUCT_NAME = temporary
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.temporary
+PRODUCT_BUNDLE_IDENTIFIER = com.litsolution.temporary
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2025 com.litsolution. All rights reserved.

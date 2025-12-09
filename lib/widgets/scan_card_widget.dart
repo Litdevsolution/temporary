@@ -1,4 +1,4 @@
-// D:\Nengxiong\Code\staypermitmobileapp\lib\widgets\ScannedCardDisplay.dart
+
 import 'package:flutter/material.dart';
 
 class ScanCard extends StatelessWidget {

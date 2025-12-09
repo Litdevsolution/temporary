@@ -157,11 +157,17 @@ void _onDetect(BarcodeCapture capture) {
   if (barcodes.isEmpty) return;
 
   final code = barcodes.first.rawValue;
-  if (code == null || code == _lastProcessedId) return; // prevent duplicate scans
+  if (code == null) return;
 
-  _lastProcessedId = code;
-  _processCode(code);
+  // Take only the last 7 characters
+  final last7Digits = code.length >= 7 ? code.substring(code.length - 7) : code;
+
+  if (last7Digits == _lastProcessedId) return; // prevent duplicate scans
+
+  _lastProcessedId = last7Digits;
+  _processCode(last7Digits); // send only last 7 digits
 }
+
 
 
   void _processCode(String code) async {
@@ -459,10 +465,12 @@ void _onDetect(BarcodeCapture capture) {
                             keyboardType: TextInputType.number,
                             onSubmitted: (value) {
                               if (value.isNotEmpty) {
-                                _lastProcessedId = value;
-                                _processCode(value);
+                                final last7Digits = value.length >= 7 ? value.substring(value.length - 7) : value;
+                                _lastProcessedId = last7Digits;
+                                _processCode(last7Digits);
                               }
                             },
+
                           ),
                           const SizedBox(height: 20),
                           SizedBox(
@@ -470,10 +478,14 @@ void _onDetect(BarcodeCapture capture) {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_manualCodeController.text.isNotEmpty) {
-                                  _lastProcessedId = _manualCodeController.text;
-                                  _processCode(_manualCodeController.text);
+                                  final last7Digits = _manualCodeController.text.length >= 7
+                                      ? _manualCodeController.text.substring(_manualCodeController.text.length - 7)
+                                      : _manualCodeController.text;
+                                  _lastProcessedId = last7Digits;
+                                  _processCode(last7Digits);
                                 }
                               },
+
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF74D2FA),
                                 padding: const EdgeInsets.all(10),
