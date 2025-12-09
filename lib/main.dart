@@ -6,6 +6,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const Main());
 }
+// void main() => runApp(const Main());
 
 class Main extends StatelessWidget {
   const Main({super.key});
